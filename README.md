@@ -14,8 +14,7 @@ Drobny szczegół: recenzję można wystawić tylko do gry, którą ma się w bi
 - Entity Framework Core 8 (Code First + migracje)
 - MS SQL Server (LocalDB)
 - ASP.NET Core Identity do logowania i ról (Admin / User)
-- Bootstrap 5 + własny arkusz CSS (ciemny motyw, RWD)
-- trochę czystego JavaScriptu (filtrowanie katalogu na żywo, podgląd okładki przy uploadzie)
+- trochę czystego JavaScriptu
 
 Architektura jest standardowa dla MVC. Modele i dostęp do danych siedzą w `Models` i `Data` (klasa `ApplicationDbContext`), logika w kontrolerach, a panel admina jest wydzielony do osobnego obszaru `Areas/Admin` i zabezpieczony rolą Admin.
 
