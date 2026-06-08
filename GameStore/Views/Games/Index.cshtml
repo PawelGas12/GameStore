@@ -1,0 +1,59 @@
+@model GameStore.Models.ViewModels.StoreIndexViewModel
+@{
+    ViewData["Title"] = "Sklep";
+}
+
+<h1 class="mb-3">Sklep z grami</h1>
+
+<form method="get" class="gs-toolbar">
+    <div style="flex:1; min-width:200px;">
+        <label class="form-label" for="liveSearch">Szukaj tytułu</label>
+        <input type="text" id="liveSearch" name="searchTerm" value="@Model.SearchTerm"
+               class="form-control" placeholder="np. Neon..." autocomplete="off" />
+    </div>
+    <div style="min-width:170px;">
+        <label class="form-label" for="genreId">Gatunek</label>
+        <select id="genreId" name="genreId" class="form-select" data-autosubmit>
+            <option value="0">Wszystkie</option>
+            @foreach (var g in Model.Genres)
+            {
+                if (Model.SelectedGenreId == g.GenreId)
+                {
+                    <option value="@g.GenreId" selected>@g.Name</option>
+                }
+                else
+                {
+                    <option value="@g.GenreId">@g.Name</option>
+                }
+            }
+        </select>
+    </div>
+    <div style="min-width:170px;">
+        <label class="form-label" for="sortOrder">Sortuj</label>
+        <select id="sortOrder" name="sortOrder" class="form-select" data-autosubmit>
+            <option value="">Najnowsze</option>
+            <option value="title" selected="@(Model.SortOrder == "title")">Tytuł A–Z</option>
+            <option value="price_asc" selected="@(Model.SortOrder == "price_asc")">Cena rosnąco</option>
+            <option value="price_desc" selected="@(Model.SortOrder == "price_desc")">Cena malejąco</option>
+        </select>
+    </div>
+    <div>
+        <label class="form-label">&nbsp;</label>
+        <button type="submit" class="gs-btn w-100">Filtruj</button>
+    </div>
+</form>
+
+@if (Model.Games.Any())
+{
+    <div class="gs-grid">
+        @foreach (var game in Model.Games)
+        {
+            <partial name="_GameCard" model="game" />
+        }
+    </div>
+    <p id="emptyState" class="gs-muted mt-4" style="display:none;">Brak gier pasujących do wyszukiwania.</p>
+}
+else
+{
+    <p class="gs-muted mt-4">Brak gier pasujących do kryteriów.</p>
+}

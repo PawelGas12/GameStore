@@ -1,0 +1,22 @@
+@model List<GameStore.Models.DbModels.Game>
+@{
+    ViewData["Title"] = "Start";
+}
+
+<h1 class="mb-3 text-center">GameStore</h1>
+
+<h2 class="gs-section-title gs-section-title-center">Polecane / nowości</h2>
+
+@if (Model.Any())
+{
+    <div class="gs-grid gs-grid-featured">
+        @foreach (var game in Model)
+        {
+            <partial name="_GameCard" model="game" />
+        }
+    </div>
+}
+else
+{
+    <p class="gs-muted text-center">Brak gier w katalogu. Zaloguj się jako administrator i dodaj pierwszą grę.</p>
+}

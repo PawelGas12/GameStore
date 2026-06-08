@@ -1,0 +1,46 @@
+@model List<GameStore.Models.DbModels.Review>
+@{
+    ViewData["Title"] = "Panel – Recenzje";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Recenzje / komentarze</h1>
+    <div>
+        <a class="gs-btn-ghost btn" asp-controller="Games" asp-action="Index">&larr; Gry</a>
+    </div>
+</div>
+
+<div class="gs-panel">
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr><th>Gra</th><th>Autor</th><th>Ocena</th><th>Treść</th><th>Data</th><th class="text-end">Akcje</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@(r.Game?.Title ?? "—")</td>
+                    <td>@r.UserName</td>
+                    <td><span class="gs-stars">@(new string('★', r.Rating))<span class="empty">@(new string('★', 5 - r.Rating))</span></span></td>
+                    <td style="max-width:340px;">@r.Comment</td>
+                    <td class="gs-muted">@r.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">
+                        <form asp-action="Delete" method="post" onsubmit="return confirm('Usunąć tę recenzję?');" class="d-inline">
+                            <input type="hidden" name="id" value="@r.ReviewId" />
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="gs-muted mb-0">Brak recenzji w serwisie.</p>
+}
+</div>

@@ -1,0 +1,23 @@
+## Visual Studio / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## Wgrane okładki (generowane w czasie działania aplikacji)
+wwwroot/uploads/*
+!wwwroot/uploads/.gitkeep
+
+## Pliki systemowe
+.DS_Store
+Thumbs.db

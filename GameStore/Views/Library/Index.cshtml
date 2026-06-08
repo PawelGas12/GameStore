@@ -1,0 +1,24 @@
+@model List<GameStore.Models.DbModels.Game>
+@{
+    ViewData["Title"] = "Moja biblioteka";
+}
+
+<h1 class="mb-3">Moja biblioteka</h1>
+<p class="gs-muted">Gry, które dodałeś do swojej kolekcji.</p>
+
+@if (Model.Any())
+{
+    <div class="gs-grid mt-3">
+        @foreach (var game in Model)
+        {
+            <partial name="_GameCard" model="game" />
+        }
+    </div>
+}
+else
+{
+    <div class="gs-panel mt-3">
+        <p class="mb-2">Twoja biblioteka jest pusta.</p>
+        <a class="gs-btn" asp-controller="Games" asp-action="Index">Przeglądaj sklep</a>
+    </div>
+}

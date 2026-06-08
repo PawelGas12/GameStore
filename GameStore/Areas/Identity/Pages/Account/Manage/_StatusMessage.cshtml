@@ -1,0 +1,10 @@
+@model string
+
+@if (!string.IsNullOrEmpty(Model))
+{
+    var statusClass = Model.StartsWith("Błąd") ? "alert-danger" : "gs-alert";
+    <div class="alert @statusClass alert-dismissible fade show" role="alert">
+        @Model
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Zamknij"></button>
+    </div>
+}

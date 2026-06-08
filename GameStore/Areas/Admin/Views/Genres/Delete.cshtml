@@ -1,0 +1,14 @@
+@model GameStore.Models.DbModels.Genre
+@{
+    ViewData["Title"] = "Usuń gatunek";
+}
+<h1 class="mb-3 text-danger">Usuń gatunek</h1>
+<div class="gs-panel" style="max-width:480px;">
+    <p>Czy na pewno usunąć gatunek <strong>@Model.Name</strong>?</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@Model.GenreId" />
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Tak, usuń</button>
+        <a class="gs-btn-ghost btn ms-2" asp-action="Index">Anuluj</a>
+    </form>
+</div>

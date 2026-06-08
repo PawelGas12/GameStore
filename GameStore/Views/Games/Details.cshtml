@@ -1,0 +1,152 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@model GameStore.Models.ViewModels.GameDetailsViewModel
+@{
+    ViewData["Title"] = Model.Game.Title;
+    var avg = Model.Reviews.Any() ? Model.Reviews.Average(r => r.Rating) : 0;
+    var avgRounded = (int)Math.Round(avg);
+}
+
+<nav class="mb-3"><a asp-action="Index">&larr; Wróć do sklepu</a></nav>
+
+<h1>@Model.Game.Title</h1>
+<div class="mb-3">
+    <span class="gs-badge">@(Model.Game.Genre?.Name ?? "—")</span>
+    <span class="gs-muted ms-2">@(Model.Game.Publisher?.Name ?? "—")</span>
+    <span class="gs-muted ms-2">Premiera: @Model.Game.ReleaseDate.ToString("dd.MM.yyyy")</span>
+</div>
+
+<div class="gs-detail">
+    <div>
+        @if (!string.IsNullOrEmpty(Model.Game.CoverImagePath))
+        {
+            <img class="gs-detail-cover" src="@Model.Game.CoverImagePath" alt="Okładka gry @Model.Game.Title" />
+        }
+        else
+        {
+            <div class="gs-detail-cover d-flex align-items-center justify-content-center">
+                <span class="gs-noimg">brak okładki</span>
+            </div>
+        }
+        <h2 class="gs-section-title mt-4">Opis</h2>
+        <p style="white-space:pre-line;">@Model.Game.Description</p>
+    </div>
+
+    <aside class="gs-purchase">
+        <div class="gs-stars mb-1" title="Średnia ocena: @avg.ToString("0.0")">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <span class="@(i <= avgRounded ? "" : "empty")">★</span>
+            }
+        </div>
+        <div class="gs-muted mb-3">@avg.ToString("0.0") / 5 (@Model.Reviews.Count recenzji)</div>
+
+        <div class="gs-price" style="font-size:1.6rem;">@Model.Game.Price.ToString("0.00") zł</div>
+
+        @if (SignInManager.IsSignedIn(User))
+        {
+            if (Model.IsInLibrary)
+            {
+                <form asp-controller="Library" asp-action="Remove" method="post" class="mt-3">
+                    <input type="hidden" name="gameId" value="@Model.Game.GameId" />
+                    @Html.AntiForgeryToken()
+                    <span class="gs-badge mb-2 d-inline-block">✓ W Twojej bibliotece</span>
+                    <button type="submit" class="gs-btn-ghost btn w-100 mt-2">Usuń z biblioteki</button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Library" asp-action="Add" method="post" class="mt-3">
+                    <input type="hidden" name="gameId" value="@Model.Game.GameId" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="gs-btn-buy btn w-100">+ Dodaj do biblioteki</button>
+                </form>
+            }
+        }
+        else
+        {
+            <a class="gs-btn-buy btn w-100 mt-3" asp-area="Identity" asp-page="/Account/Login">Zaloguj się, aby dodać</a>
+        }
+    </aside>
+</div>
+
+<section class="mt-5">
+    <h2 class="gs-section-title">Recenzje</h2>
+
+    @if (SignInManager.IsSignedIn(User) && Model.IsInLibrary && !Model.HasReviewed)
+    {
+        <div class="gs-panel mb-4">
+            <h4>Dodaj swoją recenzję</h4>
+            <form asp-controller="Games" asp-action="AddReview" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="GameId" value="@Model.Game.GameId" />
+
+                <label class="form-label d-block">Ocena</label>
+                <div class="gs-rating-input mb-3">
+                    @for (int i = 5; i >= 1; i--)
+                    {
+                        <input type="radio" name="Rating" id="star@(i)" value="@i" />
+                        <label for="star@(i)" title="@i">★</label>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="Comment">Treść recenzji</label>
+                    <textarea name="Comment" id="Comment" class="form-control" rows="3"
+                              placeholder="Co sądzisz o tej grze?"></textarea>
+                </div>
+                <button type="submit" class="gs-btn">Opublikuj recenzję</button>
+            </form>
+        </div>
+    }
+    else if (SignInManager.IsSignedIn(User) && Model.HasReviewed)
+    {
+        <p class="gs-muted">Dodałeś już recenzję tej gry. Dziękujemy!</p>
+    }
+    else if (SignInManager.IsSignedIn(User) && !Model.IsInLibrary)
+    {
+        <p class="gs-muted">Aby napisać recenzję, musisz najpierw dodać tę grę do swojej biblioteki.</p>
+    }
+    else
+    {
+        <p class="gs-muted"><a asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>, aby dodać recenzję.</p>
+    }
+
+    @if (Model.Reviews.Any())
+    {
+        <div class="gs-panel">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="gs-review">
+                    <div class="gs-review-head">
+                        <span class="gs-review-author">@review.UserName</span>
+                        <span class="d-inline-flex align-items-center gap-2">
+                            <span class="gs-muted">@review.CreatedAt.ToString("dd.MM.yyyy")</span>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <form asp-area="Admin" asp-controller="Reviews" asp-action="Delete" method="post"
+                                      onsubmit="return confirm('Usunąć tę recenzję?');" class="d-inline">
+                                    <input type="hidden" name="id" value="@review.ReviewId" />
+                                    <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Games", new { id = Model.Game.GameId })" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger py-0">Usuń</button>
+                                </form>
+                            }
+                        </span>
+                    </div>
+                    <div class="gs-stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <span class="@(i <= review.Rating ? "" : "empty")">★</span>
+                        }
+                    </div>
+                    <p class="mb-0 mt-1">@review.Comment</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="gs-muted">Brak recenzji – bądź pierwszy!</p>
+    }
+</section>

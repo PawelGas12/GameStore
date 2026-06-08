@@ -1,0 +1,53 @@
+@model List<GameStore.Models.DbModels.Game>
+@{
+    ViewData["Title"] = "Panel – Gry";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Zarządzanie grami</h1>
+    <a class="gs-btn" asp-action="Create">+ Dodaj grę</a>
+</div>
+
+<nav class="mb-3">
+    <a class="gs-btn-ghost btn btn-sm" asp-controller="Genres" asp-action="Index">Gatunki</a>
+    <a class="gs-btn-ghost btn btn-sm" asp-controller="Publishers" asp-action="Index">Wydawcy</a>
+    <a class="gs-btn-ghost btn btn-sm" asp-controller="Reviews" asp-action="Index">Recenzje</a>
+</nav>
+
+<div class="gs-panel">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Okładka</th><th>Tytuł</th><th>Gatunek</th><th>Wydawca</th>
+                    <th>Cena</th><th class="text-end">Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var g in Model)
+            {
+                <tr>
+                    <td style="width:90px;">
+                        @if (!string.IsNullOrEmpty(g.CoverImagePath))
+                        {
+                            <img src="@g.CoverImagePath" alt="" style="width:80px;height:45px;object-fit:cover;border-radius:4px;" />
+                        }
+                        else
+                        {
+                            <span class="gs-muted">—</span>
+                        }
+                    </td>
+                    <td>@g.Title</td>
+                    <td>@(g.Genre?.Name ?? "—")</td>
+                    <td>@(g.Publisher?.Name ?? "—")</td>
+                    <td>@g.Price.ToString("0.00") zł</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm gs-btn-ghost" asp-action="Edit" asp-route-id="@g.GameId">Edytuj</a>
+                        <a class="btn btn-sm gs-btn-ghost" asp-action="Delete" asp-route-id="@g.GameId">Usuń</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

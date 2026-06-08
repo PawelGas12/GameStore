@@ -1,0 +1,19 @@
+@model GameStore.Models.DbModels.Publisher
+@{
+    ViewData["Title"] = "Edytuj wydawcę";
+}
+<h1 class="mb-3">Edytuj wydawcę</h1>
+<div class="gs-panel" style="max-width:480px;">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="PublisherId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="gs-btn">Zapisz zmiany</button>
+        <a class="gs-btn-ghost btn ms-2" asp-action="Index">Anuluj</a>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

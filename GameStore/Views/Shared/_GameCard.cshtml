@@ -1,0 +1,35 @@
+@model GameStore.Models.DbModels.Game
+@{
+    var rating = Model.Reviews != null && Model.Reviews.Any()
+        ? (int)Math.Round(Model.Reviews.Average(r => r.Rating)) : 0;
+}
+<article class="gs-card" data-game-card data-title="@Model.Title">
+    <a asp-area="" asp-controller="Games" asp-action="Details" asp-route-id="@Model.GameId" class="gs-card-cover">
+        @if (!string.IsNullOrEmpty(Model.CoverImagePath))
+        {
+            <img src="@Model.CoverImagePath" alt="Okładka gry @Model.Title" />
+        }
+        else
+        {
+            <span class="gs-noimg">brak okładki</span>
+        }
+    </a>
+    <div class="gs-card-body">
+        <h3 class="gs-card-title">
+            <a asp-area="" asp-controller="Games" asp-action="Details" asp-route-id="@Model.GameId" style="color:var(--gs-text-strong)">@Model.Title</a>
+        </h3>
+        <div class="gs-card-meta">
+            <span class="gs-badge">@(Model.Genre?.Name ?? "—")</span>
+        </div>
+        <div class="gs-stars" title="Średnia ocena">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <span class="@(i <= rating ? "" : "empty")">★</span>
+            }
+        </div>
+        <div class="gs-card-footer">
+            <span class="gs-price">@Model.Price.ToString("0.00") zł</span>
+            <a class="gs-btn-ghost btn btn-sm" asp-area="" asp-controller="Games" asp-action="Details" asp-route-id="@Model.GameId">Zobacz</a>
+        </div>
+    </div>
+</article>

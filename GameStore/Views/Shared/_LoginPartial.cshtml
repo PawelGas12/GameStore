@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav align-items-lg-center">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Library" asp-action="Index">
+            <i class="bi"></i> Moja biblioteka
+        </a>
+    </li>
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link gs-admin-link" asp-area="Admin" asp-controller="Games" asp-action="Index">Panel admina</a>
+        </li>
+    }
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Zarządzaj">@User.Identity?.Name</a>
+    </li>
+    <li class="nav-item">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="btn btn-sm gs-btn-ghost">Wyloguj</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Zaloguj</a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-sm gs-btn ms-lg-2" asp-area="Identity" asp-page="/Account/Register">Załóż konto</a>
+    </li>
+}
+</ul>

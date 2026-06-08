@@ -1,0 +1,17 @@
+@model GameStore.Models.DbModels.Game
+@{
+    ViewData["Title"] = "Edytuj grę";
+}
+<h1 class="mb-3">Edytuj grę</h1>
+<div class="gs-panel">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="GameId" />
+        <input type="hidden" asp-for="CoverImagePath" />
+        <partial name="_GameForm" model="Model" />
+        <div class="mt-3">
+            <button type="submit" class="gs-btn">Zapisz zmiany</button>
+            <a class="gs-btn-ghost btn ms-2" asp-action="Index">Anuluj</a>
+        </div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

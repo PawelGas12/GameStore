@@ -1,0 +1,29 @@
+@model List<GameStore.Models.DbModels.Publisher>
+@{
+    ViewData["Title"] = "Panel – Wydawcy";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Wydawcy</h1>
+    <div>
+        <a class="gs-btn-ghost btn" asp-controller="Games" asp-action="Index">&larr; Gry</a>
+        <a class="gs-btn ms-2" asp-action="Create">+ Dodaj wydawcę</a>
+    </div>
+</div>
+<div class="gs-panel">
+    <table class="table align-middle">
+        <thead><tr><th>Nazwa</th><th>Liczba gier</th><th class="text-end">Akcje</th></tr></thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Games.Count</td>
+                <td class="text-end">
+                    <a class="btn btn-sm gs-btn-ghost" asp-action="Edit" asp-route-id="@item.PublisherId">Edytuj</a>
+                    <a class="btn btn-sm gs-btn-ghost" asp-action="Delete" asp-route-id="@item.PublisherId">Usuń</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

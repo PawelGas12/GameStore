@@ -1,0 +1,14 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Błąd";
+}
+
+<h1 class="text-danger">Wystąpił błąd.</h1>
+<h2 class="text-danger">Podczas przetwarzania żądania wystąpił problem.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p><strong>Identyfikator żądania:</strong> <code>@Model.RequestId</code></p>
+}
+
+<p class="gs-muted">Tryb deweloperski pokazuje więcej szczegółów błędu w środowisku Development.</p>

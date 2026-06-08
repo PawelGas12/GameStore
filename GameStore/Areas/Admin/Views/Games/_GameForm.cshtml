@@ -1,0 +1,48 @@
+@model GameStore.Models.DbModels.Game
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+<div class="row g-3">
+    <div class="col-md-7">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="col-6 mb-3">
+                <label asp-for="ReleaseDate" class="form-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="mb-3">
+            <label asp-for="GenreId" class="form-label"></label>
+            <select asp-for="GenreId" class="form-select" asp-items="ViewBag.Genres"></select>
+            <span asp-validation-for="GenreId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PublisherId" class="form-label"></label>
+            <select asp-for="PublisherId" class="form-select" asp-items="ViewBag.Publishers"></select>
+            <span asp-validation-for="PublisherId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="coverFile" class="form-label">Okładka (plik graficzny)</label>
+            <input type="file" id="coverFile" name="coverFile" class="form-control" accept="image/*" />
+            <img id="coverPreview" src="@Model.CoverImagePath" alt=""
+                 style="@(string.IsNullOrEmpty(Model.CoverImagePath) ? "display:none;" : "") width:100%;margin-top:10px;border-radius:6px;border:1px solid var(--gs-border);" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-3">Zarządzaj kontem</h1>
+
+<div class="gs-panel">
+    <h2 class="gs-section-title">Ustawienia konta</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

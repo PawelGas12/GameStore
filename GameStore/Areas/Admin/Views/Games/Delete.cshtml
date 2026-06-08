@@ -1,0 +1,15 @@
+@model GameStore.Models.DbModels.Game
+@{
+    ViewData["Title"] = "Usuń grę";
+}
+<h1 class="mb-3 text-danger">Usuń grę</h1>
+<div class="gs-panel">
+    <p>Czy na pewno chcesz usunąć grę <strong>@Model.Title</strong>?</p>
+    <p class="gs-muted">Usunięte zostaną także powiązane recenzje i wpisy w bibliotekach użytkowników.</p>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@Model.GameId" />
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Tak, usuń</button>
+        <a class="gs-btn-ghost btn ms-2" asp-action="Index">Anuluj</a>
+    </form>
+</div>
